@@ -1,7 +1,24 @@
 <?php
+    session_start();
+?>
 
-if(isset($_POST['name']))
-{
+<div class="alert">
+    <?php
+        if(isset($_SESSION['status'])){
+    ?>
+            <div class="alert alert-success">
+                <h5><?php echo $_SESSION['status'];?></h5>
+            </div>
+            <?php
+            unset($_SESSION['status']);
+        }
+        ?>
+</div>
+
+
+<?php
+
+    include 'index.html';
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -13,54 +30,82 @@ if(isset($_POST['name']))
         die("connection error". mysqli_connect_error());
     }
 
-    $name = $_POST['name'];
-    $gender = $_POST['gender'];
-    $age = $_POST['age'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $desc = $_POST['desc'];
+    if(isset($_POST['submit']))
+    {
 
-    $sql = "INSERT INTO `practice_1`.`login_info` (`name`, `age`, `gender`, `email`, `phone`, `desc`,`date`) 
-    VALUES ('$name', '$age', '$gender', '$email', '$phone', '$desc', current_timestamp());";
+        $name = $_POST['name'];
+        $gender = $_POST['gender'];
+        $age = $_POST['age'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $desc = $_POST['desc'];
+        $password = $_POST['password'];
 
-    $conn->query($sql);    
+        $sql = "INSERT INTO `practice_1`.`login_info` (`name`, `age`, `gender`, `email`,`password`, `phone`, `desc`) 
+        VALUES ('$name', '$age', '$gender', '$email','$password', '$phone', '$desc');";
 
-    $conn->close();
-}
+
+
+        $result = mysqli_query($conn, $sql);
+
+        if($result)
+        {
+            $_SESSION['status'] = "Submitted successfully";
+            header("location:index.php");
+        }
+
+    }
 
 ?>
+<br>
+<h1>Data in The Database</h1>
+<br>
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome To Travel Form</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h3>Welcome To Tushar's Trip form</h3>
-        <p>Enter your Details</p>
-        
-
-        <form action="index.php" method="post">
-
-            <input type="text" name="name" id="name" placeholder="Enter Your Name">
-            <input type="text" name="age" id="age" placeholder="Enter Your age">
-            <input type="text" name="gender" id="gender" placeholder="Enter Your gender">
-            <input type="email" name="email" id="email" placeholder="Enter Your email">
-            <input type="phone" name="phone" id="phone" placeholder="Enter Your phone number">
-            <textarea name="desc" id="desc" cols="30" rows="10" placeholder="Enter other info"></textarea>
-            <button class="btn">Submit</button>
-            <button class="btn">Reset</button>
-        </form>
-    </div>
-
-    <script src="index.js"></script>
-</body>
-</html>
 
 
+
+<table class="table" id = "myTable">
+  <thead>
+    <tr>
+      <th scope="col">sl</th>
+      <th scope="col">Name</th>
+      <th scope="col">age</th>
+      <th scope="col">gender</th>
+      <th scope="col">email</th>
+      <th scope="col">password</th>
+      <th scope="col">phone</th>
+      <th scope="col">desc</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <?php
+
+        $sql = "SELECT * FROM `practice_1`.`login_info`;";
+
+        $result = mysqli_query($conn, $sql);
+
+        while($row = mysqli_fetch_assoc($result))
+        {
+            echo "
+
+            <tr>
+                <th scope='row'>".$row['sl']."</th>
+                <td>".$row['name']."</td>
+                <td>".$row['age']."</td>
+                <td>".$row['gender']."</td>
+                <td>".$row['email']."</td>
+                <td>".$row['password']."</td>
+                <td>".$row['phone']."</td>
+                <td>".$row['desc']."</td>  
+            </tr>
+
+            ";
+        }
+
+    ?>
+
+  </tbody>
+</table>

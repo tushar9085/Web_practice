@@ -6,7 +6,7 @@
 
 .container{
     max-width: 80%;
-    background-color: rgb(189, 189, 65);
+    background-color: rgb(235, 235, 163);
     padding: 34px;
     margin: auto;
 }
@@ -38,4 +38,10 @@ form{
     border-radius: 6px;
     margin: 6px;
     cursor: pointer;
+}
+
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
 }
