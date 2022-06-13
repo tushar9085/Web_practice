@@ -36,7 +36,7 @@ include 'navbar.php';
     <title>Document</title>
 </head>
 <body>
-    
+    <h1>Welcome MotherF**ker</h1>
 </body>
 </html>
 
